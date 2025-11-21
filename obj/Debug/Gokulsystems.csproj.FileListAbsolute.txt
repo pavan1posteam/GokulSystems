@@ -81,3 +81,15 @@ C:\Bottlecapps\API\Gokulsystems\obj\Debug\Gokulsystems.csproj.CoreCompileInputs.
 C:\Bottlecapps\API\Gokulsystems\obj\Debug\Gokulsystems.csproj.CopyComplete
 C:\Bottlecapps\API\Gokulsystems\obj\Debug\Gokulsystems.exe
 C:\Bottlecapps\API\Gokulsystems\obj\Debug\Gokulsystems.pdb
+D:\Bottlecapps\API\Gokulsystems\bin\Debug\Gokulsystems.exe.config
+D:\Bottlecapps\API\Gokulsystems\bin\Debug\Gokulsystems.exe
+D:\Bottlecapps\API\Gokulsystems\bin\Debug\Gokulsystems.pdb
+D:\Bottlecapps\API\Gokulsystems\bin\Debug\Newtonsoft.Json.dll
+D:\Bottlecapps\API\Gokulsystems\bin\Debug\RestSharp.dll
+D:\Bottlecapps\API\Gokulsystems\bin\Debug\Newtonsoft.Json.xml
+D:\Bottlecapps\API\Gokulsystems\bin\Debug\RestSharp.xml
+D:\Bottlecapps\API\Gokulsystems\obj\Debug\Gokulsystems.csproj.AssemblyReference.cache
+D:\Bottlecapps\API\Gokulsystems\obj\Debug\Gokulsystems.csproj.CoreCompileInputs.cache
+D:\Bottlecapps\API\Gokulsystems\obj\Debug\Gokulsystems.csproj.CopyComplete
+D:\Bottlecapps\API\Gokulsystems\obj\Debug\Gokulsystems.exe
+D:\Bottlecapps\API\Gokulsystems\obj\Debug\Gokulsystems.pdb

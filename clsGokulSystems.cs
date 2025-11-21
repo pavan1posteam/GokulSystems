@@ -28,6 +28,12 @@ namespace Gokulsystems
            // if (Differentendpoints.Contains(StoreId.ToString()))
             if (string.IsNullOrEmpty(Pin))
             {
+                Boolean flag = Regex.IsMatch(BaseUrl, @"com$");
+                if (flag)
+                {
+                    BaseUrl += "/api/v1/GetProduct";
+                }
+
                 var client = new RestClient(BaseUrl);
                 var request = new RestRequest(Method.GET);
                 string content = null;
@@ -52,6 +58,13 @@ namespace Gokulsystems
             }
             else
             {
+
+                Boolean flag = Regex.IsMatch(BaseUrl, @"com$");
+                if (flag)
+                {
+                    BaseUrl +=  "/api/Item/GetItemList";
+                }
+
                 string authInfo = Username + ":" + Password + ":" + Pin;
                 authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
                 string content = null;
