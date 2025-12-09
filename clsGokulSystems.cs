@@ -23,11 +23,15 @@ namespace Gokulsystems
 
         public List<JArray> products(int StoreId, decimal tax, string BaseUrl, string Username, string Password, string Pin)
         {
-            List<JArray> productList = new List<JArray>(); ;
+            List<JArray> productList = new List<JArray>(); 
 
-           // if (Differentendpoints.Contains(StoreId.ToString()))
-            if (string.IsNullOrEmpty(Pin))    //gokul
+            if (string.IsNullOrEmpty(BaseUrl))
             {
+                BaseUrl = "https://products.gpossystem.com";
+            }
+            // if (Differentendpoints.Contains(StoreId.ToString()))
+            if (string.IsNullOrEmpty(Pin))    //gokul
+            {          
                 Boolean flag = Regex.IsMatch(BaseUrl, @"com$");
                 if (flag)
                 {
@@ -58,12 +62,7 @@ namespace Gokulsystems
             }
             else
             {
-                //sypramsoftware
-                Boolean flag = Regex.IsMatch(BaseUrl, @"com$");
-                if (flag)
-                {
-                    BaseUrl +=  "/api/Item/GetItemList";
-                }
+                
 
                 string authInfo = Username + ":" + Password + ":" + Pin;
                 authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));

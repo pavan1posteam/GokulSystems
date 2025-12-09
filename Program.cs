@@ -17,7 +17,12 @@ namespace Gokulsystems
                 {
                     try
                     {
-                        if ( current.PosName.ToUpper() == "GOKULSYSTEMS" && current.StoreSettings.StoreId== 10878 )
+
+                        /*if (current.StoreSettings.StoreId == 12830)
+                        { Console.WriteLine("fetching_storeid__" + current.StoreSettings.StoreId ); }
+                        else { continue; }*/
+
+                        if ( current.PosName.ToUpper() == "GOKULSYSTEMS"  )
                         {
                             Gokulsystems.clsGokulSystems.GokulCsvProducts clsGokulSystems = new Gokulsystems.clsGokulSystems.GokulCsvProducts(current.StoreSettings.StoreId, current.StoreSettings.POSSettings.tax, current.StoreSettings.POSSettings.BaseUrl, current.StoreSettings.POSSettings.Username, current.StoreSettings.POSSettings.Password, current.StoreSettings.POSSettings.Pin, current.StoreSettings.POSSettings.categoriess);
                             Console.WriteLine();

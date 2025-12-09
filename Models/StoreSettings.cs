@@ -29,7 +29,7 @@ namespace Gokulsystems.Models
                     {
                         cmd.Connection = con;
                         cmd.CommandText = "usp_ts_GetStorePosSetting";
-                     //   cmd.Parameters.Add(sparams[0]);
+                        cmd.Parameters.Add(sparams[0]);
                         cmd.CommandType = CommandType.StoredProcedure;
                         using (SqlDataAdapter da = new SqlDataAdapter())
                         {
