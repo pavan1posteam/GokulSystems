@@ -26,7 +26,7 @@ namespace Gokulsystems
             List<JArray> productList = new List<JArray>(); ;
 
            // if (Differentendpoints.Contains(StoreId.ToString()))
-            if (string.IsNullOrEmpty(Pin))
+            if (string.IsNullOrEmpty(Pin))    //gokul
             {
                 Boolean flag = Regex.IsMatch(BaseUrl, @"com$");
                 if (flag)
@@ -58,7 +58,7 @@ namespace Gokulsystems
             }
             else
             {
-
+                //sypramsoftware
                 Boolean flag = Regex.IsMatch(BaseUrl, @"com$");
                 if (flag)
                 {
