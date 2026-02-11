@@ -170,6 +170,19 @@ namespace Gokulsystems
                                 if (string.IsNullOrEmpty(pmsk.uom))
                                     pmsk.uom = getVolume(pmsk.StoreProductName);
                                 fname.pcat = itm["depname"].ToString();
+                                #region new include for excluding thc & tobacco category 
+                                if (storeid == 12892)
+                                {
+                                    string category = fname.pcat?.Trim().ToUpper();
+
+                                    if (category.Contains("TOBACCO") ||
+                                        category.Contains("THC"))
+                                    {
+                                        continue;
+                                    }
+                                }
+
+                                #endregion
                                 fname.pcat1 = "";
                                 fname.pcat2 = "";
                                 fname.country = "";
