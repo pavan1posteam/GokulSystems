@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -53,6 +54,7 @@ namespace Gokulsystems
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 IRestResponse response = client.Execute(request);
                 content = response.Content;
+                //File.WriteAllText($"{StoreId}.json", response.Content);
                 var result = JsonConvert.DeserializeObject<clsProductList.items>(content);
 
                 var pJson = (dynamic)JObject.Parse(content);
@@ -152,7 +154,16 @@ namespace Gokulsystems
                                 fname.pname = itm["productname"].ToString().Trim();
                                 pmsk.StoreDescription = itm["productname"].ToString().Trim();
                                 fname.pdesc = itm["productname"].ToString().Trim();
-                                pmsk.pack = getpack(pmsk.StoreProductName);
+                                //pmsk.pack = getpack(pmsk.StoreProductName);
+                                #region new include for pack 
+                                pmsk.pack = 1;
+                                var packs = itm["pack"].ToString();
+                                if (!string.IsNullOrEmpty(packs))
+                                    pmsk.pack =  getpack(packs);
+                                
+                                if(pmsk.pack == 1)
+                                    pmsk.pack = getpack(pmsk.StoreProductName);
+                                #endregion
                                 fname.pack = pmsk.pack;
                                 pmsk.Price = Convert.ToDecimal(itm["retailprice"]);
                                 fname.Price = Convert.ToDecimal(itm["retailprice"]);
@@ -170,6 +181,19 @@ namespace Gokulsystems
                                 if (string.IsNullOrEmpty(pmsk.uom))
                                     pmsk.uom = getVolume(pmsk.StoreProductName);
                                 fname.pcat = itm["depname"].ToString();
+                                #region new include for excluding thc & tobacco category 
+                                if (storeid == 12892)
+                                {
+                                    string category = fname.pcat?.Trim().ToUpper();
+
+                                    if (category.Contains("TOBACCO") ||
+                                        category.Contains("THC"))
+                                    {
+                                        continue;
+                                    }
+                                }
+
+                                #endregion
                                 fname.pcat1 = "";
                                 fname.pcat2 = "";
                                 fname.country = "";
@@ -216,7 +240,16 @@ namespace Gokulsystems
                                 fname.pname = itm["ItemName"].ToString();
                                 pmsk.StoreDescription = itm["ItemName"].ToString();
                                 fname.pdesc = itm["ItemName"].ToString();
-                                pmsk.pack = getpack(pmsk.StoreProductName);
+                                //pmsk.pack = getpack(pmsk.StoreProductName);
+                                #region new include for pack 
+                                pmsk.pack = 1;
+                                var packs = itm["pack"].ToString();
+                                if (!string.IsNullOrEmpty(packs))
+                                    pmsk.pack = getpack(packs);
+
+                                if (pmsk.pack == 1)
+                                    pmsk.pack = getpack(pmsk.StoreProductName);
+                                #endregion
                                 fname.pack = pmsk.pack;
                                 pmsk.Price = Convert.ToDecimal(itm["Price"]);
                                 fname.Price = Convert.ToDecimal(itm["Price"]);
@@ -279,7 +312,7 @@ namespace Gokulsystems
             public int getpack(string prodName)
             {
                 prodName = prodName.ToUpper();
-                var regexMatch = Regex.Match(prodName, @"(?<Result>\d+)PK");
+                var regexMatch = Regex.Match(prodName, @"(?<Result>\d+)\s*PK");
                 var prodPack = regexMatch.Groups["Result"].Value;
                 if (prodPack.Length > 0)
                 {
