@@ -99,7 +99,9 @@ namespace Gokulsystems
 
             public GokulCsvProducts(int storeid, decimal tax, string BaseUrl, string Username, string Password, string Pin, List<categories> cat)
             {
+                
                 GokulproductForCSV(storeid, tax, BaseUrl, Username, Password, Pin, cat);
+                
             }
             public void GokulproductForCSV(int storeid, decimal tax, string BaseUrl, string Username, string Password, string Pin, List<categories> cat)
             {
@@ -155,15 +157,11 @@ namespace Gokulsystems
                                 pmsk.StoreDescription = itm["productname"].ToString().Trim();
                                 fname.pdesc = itm["productname"].ToString().Trim();
                                 //pmsk.pack = getpack(pmsk.StoreProductName);
-                                #region new include for pack 
-                                pmsk.pack = 1;
-                                var packs = itm["pack"].ToString();
-                                if (!string.IsNullOrEmpty(packs))
-                                    pmsk.pack =  getpack(packs);
-                                
-                                if(pmsk.pack == 1)
-                                    pmsk.pack = getpack(pmsk.StoreProductName);
+                                #region new include for pack
+                                string packSource = itm["pack"]?.ToString() ?? pmsk.StoreProductName;
+                                pmsk.pack = getpack(packSource ?? "");
                                 #endregion
+
                                 fname.pack = pmsk.pack;
                                 pmsk.Price = Convert.ToDecimal(itm["retailprice"]);
                                 fname.Price = Convert.ToDecimal(itm["retailprice"]);
@@ -241,15 +239,11 @@ namespace Gokulsystems
                                 pmsk.StoreDescription = itm["ItemName"].ToString();
                                 fname.pdesc = itm["ItemName"].ToString();
                                 //pmsk.pack = getpack(pmsk.StoreProductName);
-                                #region new include for pack 
-                                pmsk.pack = 1;
-                                var packs = itm["pack"].ToString();
-                                if (!string.IsNullOrEmpty(packs))
-                                    pmsk.pack = getpack(packs);
-
-                                if (pmsk.pack == 1)
-                                    pmsk.pack = getpack(pmsk.StoreProductName);
+                                #region new include for pack
+                                string packSource = itm["pack"]?.ToString() ?? pmsk.StoreProductName;
+                                pmsk.pack = getpack(packSource ?? "");
                                 #endregion
+
                                 fname.pack = pmsk.pack;
                                 pmsk.Price = Convert.ToDecimal(itm["Price"]);
                                 fname.Price = Convert.ToDecimal(itm["Price"]);
