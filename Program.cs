@@ -24,6 +24,7 @@ namespace Gokulsystems
 
                         if ( current.PosName.ToUpper() == "GOKULSYSTEMS"  )
                         {
+                            Console.WriteLine("fetching_storeid__" + current.StoreSettings.StoreId);
                             Gokulsystems.clsGokulSystems.GokulCsvProducts clsGokulSystems = new Gokulsystems.clsGokulSystems.GokulCsvProducts(current.StoreSettings.StoreId, current.StoreSettings.POSSettings.tax, current.StoreSettings.POSSettings.BaseUrl, current.StoreSettings.POSSettings.Username, current.StoreSettings.POSSettings.Password, current.StoreSettings.POSSettings.Pin, current.StoreSettings.POSSettings.categoriess);
                             Console.WriteLine();
                         }
