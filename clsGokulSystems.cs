@@ -15,6 +15,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using static Gokulsystems.clsGokulSystems;
 namespace Gokulsystems
 {
     class clsGokulSystems
@@ -96,7 +97,7 @@ namespace Gokulsystems
             string BaseUrl1 = ConfigurationManager.AppSettings.Get("BaseDirectory");
             string Differentendpoints = ConfigurationManager.AppSettings.Get("Differentendpoints");
             string StaticQty = ConfigurationManager.AppSettings.Get("StaticQty");
-
+            string IrrespectiveOfPrice = ConfigurationManager.AppSettings.Get("IrrespectiveOfPrice");
             public GokulCsvProducts(int storeid, decimal tax, string BaseUrl, string Username, string Password, string Pin, List<categories> cat)
             {
                 
@@ -143,12 +144,12 @@ namespace Gokulsystems
                                 {
                                     continue;
                                 }
-                                
+
                                 string sku = itm["sku"].ToString();
                                 pmsk.sku = "#" + sku;
                                 fname.sku = "#" + sku;
                                 pmsk.Qty = Convert.ToInt32(itm["qty"]);
-                                if(StaticQty.Contains(storeid.ToString()))
+                                if (StaticQty.Contains(storeid.ToString()))
                                 {
                                     pmsk.Qty = 999;
                                 }
@@ -158,6 +159,7 @@ namespace Gokulsystems
                                 fname.pdesc = itm["productname"].ToString().Trim();
                                 //pmsk.pack = getpack(pmsk.StoreProductName);
                                 #region new include for pack
+
                                 string packSource = itm["pack"]?.ToString() ?? pmsk.StoreProductName;
                                 pmsk.pack = getpack(packSource ?? "");
                                 #endregion
@@ -165,7 +167,7 @@ namespace Gokulsystems
                                 fname.pack = pmsk.pack;
                                 pmsk.Price = Convert.ToDecimal(itm["retailprice"]);
                                 fname.Price = Convert.ToDecimal(itm["retailprice"]);
-                                pmsk.sprice =0;
+                                pmsk.sprice = 0;
                                 pmsk.Start = "";
                                 pmsk.End = "";
                                 pmsk.Tax = tax;
@@ -180,6 +182,7 @@ namespace Gokulsystems
                                     pmsk.uom = getVolume(pmsk.StoreProductName);
                                 fname.pcat = itm["depname"].ToString();
                                 #region new include for excluding thc & tobacco category 
+
                                 if (storeid == 12892)
                                 {
                                     string category = fname.pcat?.Trim().ToUpper();
@@ -196,14 +199,25 @@ namespace Gokulsystems
                                 fname.pcat2 = "";
                                 fname.country = "";
                                 fname.region = "";
-                                if (pmsk.Price > 0 && pmsk.Price < Convert.ToDecimal(199.99) && !string.IsNullOrEmpty(pmsk.upc))
+                                //as per ticket #48544 added this if condition and app config 
+                                if (IrrespectiveOfPrice.Contains(storeid.ToString()))
+                                {
+                                    if (pmsk.Price > 0 && !string.IsNullOrEmpty(pmsk.upc))
+                                    {
+                                        prodlist.Add(pmsk);
+
+                                        full.Add(fname);
+
+                                    }
+                                }
+                                else if (pmsk.Price > 0 && pmsk.Price < Convert.ToDecimal(199.99) && !string.IsNullOrEmpty(pmsk.upc))
                                 {
                                     prodlist.Add(pmsk);
-                                    prodlist = prodlist.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
-                                    prodlist = prodlist.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
+                                    //prodlist = prodlist.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
+                                    //prodlist = prodlist.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
                                     full.Add(fname);
-                                    full = full.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
-                                    full = full.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
+                                    //full = full.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
+                                    //full = full.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
                                 }
                             }
                             else
@@ -240,6 +254,7 @@ namespace Gokulsystems
                                 fname.pdesc = itm["ItemName"].ToString();
                                 //pmsk.pack = getpack(pmsk.StoreProductName);
                                 #region new include for pack
+
                                 string packSource = itm["pack"]?.ToString() ?? pmsk.StoreProductName;
                                 pmsk.pack = getpack(packSource ?? "");
                                 #endregion
@@ -265,38 +280,74 @@ namespace Gokulsystems
                                 fname.pcat2 = "";
                                 fname.country = "";
                                 fname.region = "";
-                                if (pmsk.Price > 0 && pmsk.Price < Convert.ToDecimal(199.99) && !string.IsNullOrEmpty(pmsk.upc))
+                                if (IrrespectiveOfPrice.Contains(storeid.ToString()))
+                                {
+                                    if (pmsk.Price > 0 && !string.IsNullOrEmpty(pmsk.upc))
+                                    {
+                                        prodlist.Add(pmsk);
+                                        full.Add(fname);
+
+                                    }
+                                }
+                                else if ( pmsk.Price > 0 && pmsk.Price < Convert.ToDecimal(199.99) && !string.IsNullOrEmpty(pmsk.upc) )
                                 {
                                     prodlist.Add(pmsk);
-                                    prodlist = prodlist.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
-                                    prodlist = prodlist.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
+                                    //prodlist = prodlist.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
+                                    //prodlist = prodlist.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
                                     full.Add(fname);
-                                    full = full.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
-                                    full = full.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
+                                    //full = full.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
+                                    //full = full.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
                                 }
 
                             }
                         }
-                        if (cat != null && cat.Count > 0)
-                        {
-                            foreach (var cats in cat)
-                            {
-                                var query = (from w in pf
-                                             where w.pcat.Trim() != cats.name.ToUpper()
-                                             select w).ToList();
-                                pf = query;
-                            }
-                        }
-                        Console.WriteLine("Generating GokulSystems " + storeid + " Product CSV Files.....");
-                        string filename = GenerateCSV.GenerateCSVFile(prodlist, "PRODUCT", storeid, BaseUrl1);
-                        Console.WriteLine("Product File Generated For GokulSystems " + storeid);
-                        Console.WriteLine();
-                        Console.WriteLine("Generating GokulSystems " + storeid + " Fullname CSV Files.....");
-                        var fullfilename = GenerateCSV.GenerateCSVFile(full, "FULLNAME", storeid, BaseUrl1);
-                        Console.WriteLine("Fullname File Generated For GokulSystems " + storeid);
-                        //Datatabletocsv csv = new Datatabletocsv();
-                      //  csv.Datatablecsv(storeid, tax, pf);
+                      //  prodlist = prodlist.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
+                      //  prodlist = prodlist.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
+                      //  full = full.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
+                      //  full = full.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
+                      //  if (cat != null && cat.Count > 0)
+                      //  {
+                      //      foreach (var cats in cat)
+                      //      {
+                      //          var query = (from w in pf
+                      //                       where w.pcat.Trim() != cats.name.ToUpper()
+                      //                       select w).ToList();
+                      //          pf = query;
+                      //      }
+                      //  }
+                      //  Console.WriteLine("Generating GokulSystems " + storeid + " Product CSV Files.....");
+                      //  string filename = GenerateCSV.GenerateCSVFile(prodlist, "PRODUCT", storeid, BaseUrl1);
+                      //  Console.WriteLine("Product File Generated For GokulSystems " + storeid);
+                      //  Console.WriteLine();
+                      //  Console.WriteLine("Generating GokulSystems " + storeid + " Fullname CSV Files.....");
+                      //  var fullfilename = GenerateCSV.GenerateCSVFile(full, "FULLNAME", storeid, BaseUrl1);
+                      //  Console.WriteLine("Fullname File Generated For GokulSystems " + storeid);
+                      //  //Datatabletocsv csv = new Datatabletocsv();
+                      ////  csv.Datatablecsv(storeid, tax, pf);
                     }
+                    prodlist = prodlist.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
+                    prodlist = prodlist.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
+                    full = full.GroupBy(x => x.sku).Select(y => y.FirstOrDefault()).ToList();
+                    full = full.GroupBy(x => x.upc).Select(y => y.FirstOrDefault()).ToList();
+                    if (cat != null && cat.Count > 0)
+                    {
+                        foreach (var cats in cat)
+                        {
+                            var query = (from w in pf
+                                         where w.pcat.Trim() != cats.name.ToUpper()
+                                         select w).ToList();
+                            pf = query;
+                        }
+                    }
+                    Console.WriteLine("Generating GokulSystems " + storeid + " Product CSV Files.....");
+                    string filename = GenerateCSV.GenerateCSVFile(prodlist, "PRODUCT", storeid, BaseUrl1);
+                    Console.WriteLine("Product File Generated For GokulSystems " + storeid);
+                    Console.WriteLine();
+                    Console.WriteLine("Generating GokulSystems " + storeid + " Fullname CSV Files.....");
+                    var fullfilename = GenerateCSV.GenerateCSVFile(full, "FULLNAME", storeid, BaseUrl1);
+                    Console.WriteLine("Fullname File Generated For GokulSystems " + storeid);
+                    //Datatabletocsv csv = new Datatabletocsv();
+                    //  csv.Datatablecsv(storeid, tax, pf);
                 }
                 catch (Exception ex)
                 {

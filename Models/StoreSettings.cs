@@ -21,7 +21,7 @@ namespace Gokulsystems.Models
             try
             {
                 List<SqlParameter> sparams = new List<SqlParameter>();
-               // sparams.Add(new SqlParameter("@PosId", 37));  //uncomment for live 
+               sparams.Add(new SqlParameter("@PosId", 37));  //uncomment for live 
                 string constr = ConfigurationManager.AppSettings.Get("LiquorAppsConnectionString");
                 using (SqlConnection con = new SqlConnection(constr))
                 {
@@ -29,7 +29,7 @@ namespace Gokulsystems.Models
                     {
                         cmd.Connection = con;
                         cmd.CommandText = "usp_ts_GetStorePosSetting";
-                       // cmd.Parameters.Add(sparams[0]);
+                        cmd.Parameters.Add(sparams[0]);
                         cmd.CommandType = CommandType.StoredProcedure;
                         using (SqlDataAdapter da = new SqlDataAdapter())
                         {
