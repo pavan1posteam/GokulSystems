@@ -61,12 +61,11 @@ namespace Gokulsystems
                 var pJson = (dynamic)JObject.Parse(content);
                 var jArray = (JArray)pJson["Data"];
                 productList.Add(jArray);
+                Console.WriteLine(jArray.Count);
 
             }
             else
-            {
-                
-
+            {              
                 string authInfo = Username + ":" + Password + ":" + Pin;
                 authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
                 string content = null;

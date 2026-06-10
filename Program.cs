@@ -17,8 +17,11 @@ namespace Gokulsystems
                 {
                     try
                     {
-
-                        //if (current.StoreSettings.StoreId == 12830)
+                        /* uncomment above string constr  before sending live in StoreSettings.cs
+                        * comment string constr = dbConnection;   because in live db keys will fetch from Appconfig only 
+                        * comment below store condition also before sending live  
+                        */
+                        //if (current.StoreSettings.StoreId == 13179)
                         //{ Console.WriteLine("fetching_storeid__" + current.StoreSettings.StoreId); }
                         //else { continue; }
 
